@@ -29,18 +29,16 @@ services:
     container_name: mysql_db
     restart: unless-stopped
     environment:
-      MYSQL_DATABASE: ${DB_DATABASE}
-      MYSQL_ROOT_PASSWORD: ${DB_ROOT_PASSWORD}
-      MYSQL_USER: ${DB_USERNAME}
-      MYSQL_PASSWORD: ${DB_PASSWORD}
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: duxone
+      MYSQL_USER: duxuser
+      MYSQL_PASSWORD: secret
     volumes:
       - db_data:/var/lib/mysql
     ports:
       - "3307:3306"
     networks:
       - laravel
-    env_file:
-      - .env.docker
 
   phpmyadmin:
     image: phpmyadmin/phpmyadmin
@@ -48,7 +46,8 @@ services:
     restart: unless-stopped
     environment:
       PMA_HOST: mysql
-      MYSQL_ROOT_PASSWORD: ${DB_ROOT_PASSWORD}
+      PMA_USER: root
+      PMA_PASSWORD: root
     ports:
       - "8080:80"
     depends_on:
@@ -59,6 +58,7 @@ services:
   redis:
     image: redis:alpine
     container_name: redis_server
+    restart: unless-stopped
     ports:
       - "6380:6379"
     networks:
